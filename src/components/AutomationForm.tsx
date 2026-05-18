@@ -12,6 +12,11 @@ export const AutomationForm = ({ automation }: {
 
     const [loading, setLoading] = useState(false);
 	const [payload, setPayload] = useState<PayloadType>({});
+	const [lastRunResult, setLastRunResult] = useState<{
+		success: boolean;
+		message: string;
+		data?: string;
+	} | null>(null);
 
 	// In order to reflect changes in settings
 	const displayPayload = {...payload}
@@ -96,18 +101,29 @@ export const AutomationForm = ({ automation }: {
         // setResult(null);
 
         try {
-          const response = await fetch('/api/n8n/' + automation.endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
+            const response = await fetch('/api/n8n/' + automation.endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
 
-          const json = await response.json();
-          console.log(json)
-        //   setResult(json);
+            const json = await response.json();
+
+            const checkResponse = () => {
+                const code = json?.data?.code
+                return response.ok && json?.success !== false && code != 404
+            }
+
+            setLastRunResult({
+				success: checkResponse(),
+				message: checkResponse() ? "Automation ran successfully." : json?.error || "Automation failed.",
+				data: JSON.stringify(json, null, 2),
+			});
         } catch (err) {
-            console.log(err)
-        //   setResult({ success: false, error: 'Failed to communicate with server' });
+			setLastRunResult({
+				success: false,
+				message: err instanceof Error ? err.message : "Failed to communicate with server",
+			});
         } finally {
           setLoading(false);
         }
@@ -156,6 +172,20 @@ export const AutomationForm = ({ automation }: {
 							onChange={(e) => handleJsonChange(e.target.value)}
 						/>
 						{jsonError && <p className="mt-1 text-xs text-red-500">Invalid JSON: {jsonError}</p>}
+
+                        {lastRunResult && (
+					        <div
+					        	className={`mt-3 rounded-lg border p-3 text-sm ${lastRunResult.success ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-rose-200 bg-rose-50 text-rose-900"}`}
+					        >
+					        	<p className="font-medium">Last Run Result</p>
+					        	<p className="mt-1">{lastRunResult.message}</p>
+					        	{lastRunResult.data && (
+					        		<pre className="mt-2 overflow-auto rounded bg-white/70 p-2 text-xs text-zinc-700">
+					        			{lastRunResult.data}
+					        		</pre>
+					        	)}
+					        </div>
+				        )}
 					</div>
 				)}
 			</div>

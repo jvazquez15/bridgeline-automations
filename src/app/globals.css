@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: var(--color-zinc-50); /* oklch(98.5% 0 0) = #fafafa; */
+	/* --background: oklch(12.435% 0.07245 274.134);
+	--background: var(--color-bridge-950); */
+	--foreground: white;
 }
+
+/* @media (prefers-color-scheme: dark) {
+	:root {
+		--background: #030122;
+		--foreground: white;
+	}
+} */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
+
+  	--color-bridge-50: oklch(0.957 0.02 289.15);
+  	--color-bridge-100: oklch(0.916 0.039 287.21);
+  	--color-bridge-200: oklch(0.833 0.081 286.89);
+  	--color-bridge-300: oklch(0.749 0.123 285.17);
+  	--color-bridge-400: oklch(0.676 0.162 283.61);
+  	--color-bridge-500: oklch(0.594 0.205 281.63);
+  	--color-bridge-600: oklch(0.516 0.245 277.58);
+  	--color-bridge-700: oklch(0.434 0.253 274.01);
+  	--color-bridge-800: oklch(0.342 0.199 273.9);
+  	--color-bridge-900: oklch(0.25 0.146 274.24);
+  	--color-bridge-950: oklch(0.202 0.118 274.46);
+
+	--colo-navy-primary: #152637;
+    --colo-grey-dark: #353b48;
+    --colo-mango-primary: #ff7416;
+    --colo-blue: #119ff7;
+    --colo-blue-smoke: #ebf7fe;
+    --colo-white: var(--_apps---sidebar--sidebar-accent-foreground-dark);
+    --colo-purple-background: #060225;
+    --colo-_apps---sidebar--sidebar-border: var(--grey-lighter);
+    --colo-_apps---sidebar--sidebar-accent-foreground-dark: #fff;
+    --colo-grey-white: #fcfcfd;
+    --colo-navy-medium: #1c334a;
+    --colo-white-smoke: #e0e0e000;
+    --colo-grey-smoke: #faf9f9;
+    --colo-grey: #656d78;
+    --colo-mango-dark: #f56200;
+    --colo-_apps---colors--popover: #efefef;
+    --colo-grey-lighter: #e6e9ed;
+    --colo-mango-medium: #ff9d5c;
+    --colo-grey-light: #ccd1d9;
+    --colo-grey-medium: #aab2bd;
+    --colo-mango-smoke: #fff5eb;
+    --colo-_apps---colors--input: #e9ecf0;
+    --colo-navy-dark: #111f2c;
+    --colo-green-medium: #e5f679;
+    --colo-navy-smoke: #e2ebf3;
+    --colo-color: #ff78ed;
+    --colo-_apps---sidebar--sidebar: #f5f5f5;
+    --colo-_apps---sidebar--sidebar-foreground-dark: #f8f8f8;
+    --colo-purple: #c1a4ff;
+    --colo-blue-medium: #b0dffc;
+    --colo-blue-dark: #077cc5;
+    --colo-_apps---sidebar--sidebar-border-dark: #0000;
+    --colo-_apps---colors--background: var(--grey-white);
+    --colo-gradient-left: #4697d2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.text-gradient-3-newhomehero {
+	color: #e2ebf3;
+	text-align: left;
+	-webkit-text-fill-color: transparent;
+	background-image: linear-gradient(90deg, #c8beff, #faacff 7%, #fd781f 52%, #ff9d5c);
+	-webkit-background-clip: text;
+	background-clip: text;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	font-size: 35px;
+	font-weight: 600;
+	line-height: 115%;
 }

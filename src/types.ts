@@ -7,6 +7,7 @@ export interface FieldDefinition {
     required?: boolean,
     placeholder?: string,
     description?: string,
+    critical?: boolean
 }
 
 export interface AutomationCardType {

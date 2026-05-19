@@ -1,14 +1,23 @@
 import { AutomationCardType, FieldDefinition } from '@/types';
 
+// Input fields for different automations
+// id represents the values fetched in n8n (key in the body of the request)
+// label is the visual name shown to users
+// type is the type of field shown in the UI (text, textarea, number, boolean)
+// default is the default value for the field
+// placeholder is the placeholder shown in the input field
+// description is the text shown in the help popup (if not provided, placeholder is used)
+// critical is a boolean representing whether the field requires user input (user cannot just use default value)
+
 export const automationsFields: AutomationCardType[] = [
     { 
         id: "synonyms", 
         title: "Track Searches and Suggest Synonyms", 
         description: "Tracks searches with poor results and suggests synonyms",
         fields: [
-            { id: "email", label: "Email", type: "text", placeholder: "Email", description: "Email address for recipient of suggestions" },
-            { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "syncGuid", description: "The sync GUID" },
-            { id: "X-HawkSearch-ApiKey", label: "X-HawkSearch-ApiKey", type: "text", placeholder: "Enter X-HawkSearch-ApiKey", description: "API key for Hawksearch." },
+            { id: "apiKey", label: "HawkSearch API Key", type: "text", placeholder: "Enter X-HawkSearch-ApiKey", description: "API key for Hawksearch." },
+            { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "syncGuid", description: "Client GUID" },
+            { id: "email", label: "Email", type: "text", placeholder: "Email", description: "Email address for recipient of suggestions" }
         ],
         endpoint: "synonyms"
     },
@@ -17,14 +26,15 @@ export const automationsFields: AutomationCardType[] = [
         title: "CSV to Index", 
         description: "Index Values from a CSV",
         fields: [
-            { id: "APIKey", label: "API Key", type: "text", required: true, placeholder: "API Key", description: "API Key" },
-            { id: "ClientGuid", label: "ClientGuid", type: "text", placeholder: "ClientGuid", description: "Client GUID=" },
-            { id: "BulkItemLimit", label: "Bulk Item Limit", type: "number", default: 125, placeholder: "Bulk Item Limit", description: "Bulk Item Limit" },
-            { id: "UseCurrentIndex", label: "Use Current Index?", type: "boolean", description: "" },
-            { id: "DeleteOlder", label: "Delete Older?", type: "boolean", description: "" },
-            { id: "BatchSize", label: "Batch Size", type: "number", default: 50, placeholder: "Batch Size", description: "" },
-            { id: "CustomFieldMapping", label: "Custom Field Mapping", type: "textarea", placeholder: "WIP (will be JSON)", description: "" },
-            { id: "GenerateCustomFieldMapping", label: "Generate Custom Field Mapping?", type: "boolean", description: "" },
+            { id: "apiKey", label: "HawkSearch API Key", type: "text", required: true, placeholder: "Enter X-HawkSearch-ApiKey", description: "API Key for Hawksearch." },
+            // Labeled ClientGuid in n8n (but syncGuid is fetched)
+            { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "syncGuid", description: "Client GUID" },
+            { id: "BulkItemLimit", label: "Bulk Item Limit", type: "number", default: 125, placeholder: "Bulk Item Limit", description: "Bulk Indexing Limit (default 125)" },
+            { id: "UseCurrentIndex", label: "Use Current Index?", type: "boolean", description: "Whether to use the current index (true) or generate a new one (false)" },
+            { id: "DeleteOlder", label: "Delete Older?", type: "boolean", description: "Whether to delete the older index (true) or the newer index (false) (UseCurrentIndex must be false to use)" },
+            { id: "BatchSize", label: "Batch Size", type: "number", default: 50, placeholder: "Batch Size", description: "The size of each batch" },
+            { id: "GenerateCustomFieldMapping", label: "Generate Custom Field Mapping?", type: "boolean", description: "Whether to generate custom field mapping instead of using a manually inputed mappping." },
+            { id: "CustomFieldMapping", label: "Custom Field Mapping", type: "textarea", placeholder: "JSON for Custom Field Mapping", description: "Custom field mapping for indexing (GenerateCustomFieldMapping must be false to use)." }
         ],
         endpoint: "CSV2Index"
     },
@@ -41,5 +51,6 @@ export const automationsFields: AutomationCardType[] = [
 ];
 
 export const settingsFields: FieldDefinition[] = [
-    { id: "X-HawkSearch-ApiKey", label: "Hawksearch API Key", placeholder: "Hawksearch API Key", type: "text", description: "API key shared with automations that need HawkSearch access." }
+    { id: "apiKey", label: "Hawksearch API Key", placeholder: "Enter X-HawkSearch-ApiKey", type: "text", description: "API Key for Hawksearch." },
+    { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "syncGuid", description: "Client GUID" },
 ]

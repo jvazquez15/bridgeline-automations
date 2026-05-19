@@ -6,6 +6,8 @@ import { settingsFields } from "@/fields";
 import { useAutomationsContext } from "@/providers/Provider";
 import { HelpPopup } from "./HelpPopup";
 
+// Settings along with preset values that persist accross automations
+// Settings are saved in local storage when updated via react context
 export default function SettingsPanel({ open, onClose }: { 
 	open: boolean,
 	onClose: () => void
@@ -18,7 +20,7 @@ export default function SettingsPanel({ open, onClose }: {
 				{settingsFields.map(field => (
 					<div key={field.id}>
 						<label className="inline text-md text-zinc-700 pr-2">{field.label}</label>
-						<HelpPopup label={field.label} description={field.description || field.placeholder} />
+						<HelpPopup label={field.label} description={field.description || field.placeholder} id={field.id} />
 						<div className="pt-2">
 							<input className="w-full rounded border px-3 py-2" value={String(settings[field.id] ?? "")} onChange={(e) => updateSettingsByField(field.id, e.target.value)} placeholder={field.placeholder} />
 						</div>

@@ -4,7 +4,15 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
 
-        const response = await fetch(process.env.N8N_CSV2INDEX_URL!, {
+        const url = process.env.N8N_CSV2INDEX_URL;
+        if (!url) {
+            return NextResponse.json(
+                { success: false, error: 'Missing environment variable' },
+                { status: 500 }
+            );
+        }
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

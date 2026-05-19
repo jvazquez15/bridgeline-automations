@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 
+// Popup modal
 export default function Modal({ children, open, onClose, title }: {
 	children: React.ReactNode;
 	open: boolean;

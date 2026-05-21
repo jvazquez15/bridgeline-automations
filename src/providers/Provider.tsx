@@ -2,10 +2,22 @@
 
 import { AutomationsContextType, PayloadType } from '@/types';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { ThemeProvider } from '@aws-amplify/ui-react';
 
 export const AutomationsContext = createContext<AutomationsContextType | null>(null);
 
 const initialSettings: PayloadType = {}
+
+const theme = {
+  name: 'my-theme',
+  tokens: {
+    colors: {
+      font: {
+        orange: { value: '#f97316'}
+      },
+    },
+  },
+};
 
 export function useAutomationsContext() {
     const context = useContext(AutomationsContext);
@@ -45,7 +57,9 @@ export default function Provider({children}: {children: React.ReactNode}) {
             resetSettings,
             updateSettingsByField
         }}>
-            {children}
+            <ThemeProvider theme={theme}>
+                {children}
+            </ThemeProvider>
         </AutomationsContext.Provider>
     );
 }

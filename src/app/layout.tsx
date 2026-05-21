@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import Provider from "@/providers/Provider";
 import Image from "next/image";
+import { Amplify } from 'aws-amplify';
+import outputs from '@/../amplify_outputs.json';
+import "./globals.css";
+
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -19,6 +22,8 @@ export const metadata: Metadata = {
 	description: "Automations Dashboard",
 };
 
+// Amplify.configure(outputs);
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -30,14 +35,14 @@ export default function RootLayout({
 			suppressHydrationWarning
 			className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
 		>
-			<Provider>
-				<body className="min-h-full flex flex-col">
-					<header className="flex sticky top-0 items-center w-full px-3.75 py-2.5 h-[57.67px] bg-white border-b border-zinc-200">
-						<Image src="/hs-logo-black.png" alt="Hawksearch Logo" width={180} height={35} />
+			<body className="min-h-full flex flex-col h-screen">
+				<Provider>
+					<header className="flex sticky top-0 items-center px-3.75 py-2.5 h-[57.67px] bg-[#ffffff] border-b border-zinc-200">
+						<Image src="/hs-logo-black.png" alt="Hawksearch Logo" width={180} height={35} className="h-auto w-auto" loading="eager" />
 					</header>
 					{children}
-				</body>
-			</Provider>
+				</Provider>
+			</body>
 		</html>
 	);
 }

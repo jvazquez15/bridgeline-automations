@@ -64,6 +64,10 @@ export const AutomationForm = ({ automation }: {
 				return { valid: false, message: "Mismatched fields" };
 			} else if (automationFieldsMap.get(fields[i])?.type === "boolean" &&  /^(true|false)$/i.test(String(parsed[fields[i]])) == false) {
 				return { valid: false, message: "Boolean fields must be set to either true or false" }
+			} else if (automationFieldsMap.get(fields[i])?.type === "number" && isNaN(Number(parsed[fields[i]]))) {
+				return { valid: false, message: "Number fields must be valid numbers" }
+			} else if (automationFieldsMap.get(fields[i])?.type === "dropdown" && automationFieldsMap.get(fields[i])?.options?.find(option => option.value === parsed[fields[i]]) == null) {
+				return { valid: false, message: "Dropdown fields must be set to one of the available options" }
 			}
 		}
 
@@ -111,6 +115,7 @@ export const AutomationForm = ({ automation }: {
 			if (validation.valid == false)
 			{
 				setJsonError("Could not update: " + validation.message)
+				return
 			}
 
 			// Updating payload (if a field isn't mentioned in JSON, it isn't updated)
@@ -207,10 +212,32 @@ export const AutomationForm = ({ automation }: {
 						value={String(displayPayload[field.id] ?? "false")}
 						onChange={(e) => handleFieldChange(field.id, e.target.value == "true")}
 					>
-						{!field.default && <option disabled value={""}>Select an Option</option>}
+						<option disabled value={""}>Select an Option</option>
 
 						<option value="true">True</option>
 						<option value="false">False</option>
+					</select>
+
+					<div className="pointer-events-none absolute inset-y-0 right-1 flex items-center z-100">
+  						<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+  						</svg>
+  					</div>
+				</div>
+			case "dropdown":
+				return <div className="relative inline-block">
+					<select
+						className="appearance-none rounded border border-divider px-3 py-2 text-md pr-6"
+						value={String(displayPayload[field.id] ?? field.default)}
+						onChange={(e) => handleFieldChange(field.id, e.target.value)}
+					>
+						<option disabled value={""}>Select an Option</option>
+
+						{field.options?.map((option) => (
+							<option key={option.value} value={option.value}>
+								{option.label}
+							</option>
+						))}
 					</select>
 
 					<div className="pointer-events-none absolute inset-y-0 right-1 flex items-center z-100">
@@ -237,7 +264,11 @@ export const AutomationForm = ({ automation }: {
 						<div key={field.id}>
 							{/* Field Label (boolean fields mustn't have one) */}
 							<div className="mb-1 flex items-center gap-2">
-								<label className={`block text-md font-medium ${field.type === "boolean" && /^(true|false)$/i.test(String(displayPayload[field.id])) == false ? "text-red-500" : "text-zinc-700"}`}>{field.label}</label>
+								<label 
+									className={`block text-md font-medium 
+									${field.type === "boolean" && /^(true|false)$/i.test(String(displayPayload[field.id])) == false 
+										|| field.type === "dropdown" && automationFieldsMap.get(field.id)?.options?.find(option => option.value === displayPayload[field.id]) == null
+									? "text-red-500" : "text-zinc-700"}`}>{field.label}</label>
 								<HelpPopup label={field.label} description={field.description || field.placeholder} id={field.id} />
 							</div>
 

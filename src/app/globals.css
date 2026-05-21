@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 :root {
-	--background: var(--color-zinc-50); /* oklch(98.5% 0 0) = #fafafa; */
-	/* --background: oklch(12.435% 0.07245 274.134);
-	--background: var(--color-bridge-950); */
+	/* oklch(98.5% 0 0) = #fafafa; */
+	--background: var(--color-zinc-50); 
+	/* --background: oklch(12.435% 0.07245 274.134); */
+	/* --background: var(--color-bridge-950); */
 	--foreground: white;
 }
 

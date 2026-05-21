@@ -16,8 +16,11 @@ export const automationsFields: AutomationCardType[] = [
         description: "Tracks searches with poor results and suggests synonyms",
         fields: [
             { id: "apiKey", label: "HawkSearch API Key", type: "text", placeholder: "Enter X-HawkSearch-ApiKey", description: "API key for Hawksearch." },
-            { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "syncGuid", description: "Client GUID" },
-            { id: "email", label: "Email", type: "text", placeholder: "Email", description: "Email address for recipient of suggestions" }
+            { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "Client GUID / Tracking Key", description: "Client GUID / Tracking Key in Engine Info" },
+            // { id: "email", label: "Email", type: "text", placeholder: "Email", description: "Email address for recipient of suggestions" }
+            { id: "recipientSlackID", label: "Recipient Slack ID", type: "text", placeholder: "Slack ID", description: "Slack ID for recipient of suggestions" },
+            { id: "internalSlackID", label: "Internal Slack ID", type: "text", placeholder: "Slack ID", description: "Slack ID for internal notifications" },
+            { id: "environment", label: "Environment", type: "dropdown", options: [{ label: "Development", value: "development" }, { label: "Test", value: "test" }, { label: "Production", value: "production" }], default: "development", description: "The environment for the automation" },
         ],
         endpoint: "synonyms"
     },
@@ -28,7 +31,7 @@ export const automationsFields: AutomationCardType[] = [
         fields: [
             { id: "apiKey", label: "HawkSearch API Key", type: "text", required: true, placeholder: "Enter X-HawkSearch-ApiKey", description: "API Key for Hawksearch." },
             // Labeled ClientGuid in n8n (but syncGuid is fetched)
-            { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "syncGuid", description: "Client GUID" },
+            { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "Client GUID / Tracking Key", description: "Client GUID / Tracking Key in Engine Info" },
             { id: "BulkItemLimit", label: "Bulk Item Limit", type: "number", default: 125, placeholder: "Bulk Item Limit", description: "Bulk Indexing Limit (default 125)" },
             { id: "UseCurrentIndex", label: "Use Current Index?", type: "boolean", description: "Whether to use the current index (true) or generate a new one (false)" },
             { id: "DeleteOlder", label: "Delete Older?", type: "boolean", description: "Whether to delete the older index (true) or the newer index (false) (UseCurrentIndex must be false to use)" },
@@ -52,5 +55,7 @@ export const automationsFields: AutomationCardType[] = [
 
 export const settingsFields: FieldDefinition[] = [
     { id: "apiKey", label: "Hawksearch API Key", placeholder: "Enter X-HawkSearch-ApiKey", type: "text", description: "API Key for Hawksearch." },
-    { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "syncGuid", description: "Client GUID" },
+    { id: "syncGuid", label: "syncGuid", type: "text", placeholder: "Client GUID / Tracking Key", description: "Client GUID / Tracking Key in Engine Info" },
+    { id: "recipientSlackID", label: "Recipient Slack ID", type: "text", placeholder: "Slack ID", description: "Slack ID for recipient of suggestions" },
+    { id: "internalSlackID", label: "Internal Slack ID", type: "text", placeholder: "Slack ID", description: "Slack ID for internal notifications" }
 ]

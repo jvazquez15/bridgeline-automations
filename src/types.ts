@@ -2,12 +2,15 @@
 export interface FieldDefinition {
     id: string,
     label: string,
-    type: "text" | "textarea" | "number" | "boolean",
+    type: "text" | "textarea" | "number" | "boolean" | "dropdown",
     default?: string | number,
     required?: boolean,
     placeholder?: string,
     description?: string,
-    critical?: boolean
+    options?: {
+        label: string,
+        value: string
+    }[]
 }
 
 export interface AutomationCardType {

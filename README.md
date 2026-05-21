@@ -42,3 +42,21 @@ The app is organized around a simple flow:
 8. Indices are then passed to the Hawksearch API, if there is an error, a message is sent to Slack, but the automation doesn't stop, and the next batch is processed.
 
 > **This is WIP**, `Loop over batches` seems to be broken (probably replace with `BatchSize` if its defined, otherwise use num items / `BulkItemLimit`). User needs to be able to define CSV from site. Slack recipient needs to also be defined from site, or replaced with a server response if possible.
+
+### Setup for Developing
+
+1. Create a `.env` file in root and fill in the following:
+
+```.env
+N8N_SYNONYMS_URL=[URL to Keywords with poor results n8n webhook]
+N8N_CSV2INDEX_URL=[URL to CSV to Index n8n webhook]
+```
+
+### TODO
+
+- Switch to slack (requires slack asking user for approval -> not implemented)
+- Use Next JS and ___ (for UI)
+- Replicate analytics page in terms of UI (clients each can make/setup their own automations so there's a rolling list of automations)
+- Login page?
+- Ability to schedule automations
+- Zod validation

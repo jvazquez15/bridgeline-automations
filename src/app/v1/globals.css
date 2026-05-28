@@ -95,33 +95,3 @@ body {
 	line-height: 115%;
 }
 
-
-
-.floating-label-container {
-  position: relative;
-  margin-top: 20px;
-}
-
-.floating-input {
-  padding: 1rem 0.5rem 0.5rem; /* Space for the label inside */
-}
-
-.floating-label {
-  position: absolute;
-  left: 10px;
-  top: 12px;
-  transition: all 0.2s ease;
-  pointer-events: none; /* Click "through" the label to the input */
-  color: var(--amplify-colors-font-tertiary);
-}
-
-/* Float the label up when focused or when text is entered */
-.floating-input:focus + .floating-label,
-.floating-input:not(:placeholder-shown) + .floating-label {
-  top: -10px;
-  left: 8px;
-  font-size: 0.8rem;
-  background-color: white; /* Match your background */
-  padding: 0 4px;
-  color: var(--amplify-colors-brand-primary-80);
-}

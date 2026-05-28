@@ -254,7 +254,7 @@ export const AutomationForm = ({ automation }: {
 	
 	return (
 		<div className="space-y-4">
-			<p className="text-md text-zinc-600">{automation.description}</p>
+			<p className="text-md text-zinc-600 bg-white">{automation.description}</p>
 			
 			{/* Dynamic Fields */}
 			{automation.fields && automation.fields.length > 0 && (

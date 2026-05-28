@@ -1,10 +1,10 @@
-// id is the key passed to the payload
+// Object representing a field of an automation parameter
 export interface FieldDefinition {
-    id: string,
+    id: string, // id is the key passed to the payload of the automation
     label: string,
     type: "text" | "textarea" | "number" | "boolean" | "dropdown",
     default?: string | number,
-    required?: boolean,
+    required?: boolean, // Makes sure that empty string and null/undefined types aren't allowed as parameters
     placeholder?: string,
     description?: string,
     options?: {
@@ -13,10 +13,12 @@ export interface FieldDefinition {
     }[]
 }
 
+// Type representing the details of an automation
 export interface AutomationCardType {
     id: string,
     title: string,
-    endpoint: `${string}`
+    endpoint: `${string}`,
+    isSchedulingSetup: boolean,
     description?: string,
     fields?: FieldDefinition[],
 }

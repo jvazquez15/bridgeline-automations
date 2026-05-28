@@ -6,11 +6,20 @@ Bridgeline Automations is a Next.js app for launching small automation workflows
 
 The app is organized around a simple flow:
 
-1. The dashboard loads a list of automations from `src/fields.ts`.
-2. Clicking a card opens `AutomationForm` in a modal.
-3. The form renders fields based on the automation.
-4. When the user runs the automation, the payload is posted to the automation-specific API route under `src/app/api/n8n/...`.
-5. The API route forwards the request to the matching n8n webhook URL from environment variables.
+1. The setup loads a list of automations from `src/fields.ts`.
+2. Once an automation is selected, the parameters of said automation must be filled in.
+3. The user can then choose to run the automation once, or schedule it.
+4. If the user runs the automation once, the payload is posted to the automation-specific API route under `src/app/api/n8n/...`.
+    - The API route forwards the request to the matching n8n webhook URL from environment variables.
+5. If the user schedules the automation, [WIP]
+
+### Scheduling Explained
+
+Once the user sets up an automation and save it, they can go back and hit schedule to start scheduling\
+This will send an n8n request with all the current parameters and automation details (even if not saved)\
+The n8n workflow will start and return an `execution id`.
+If the user wishes to stop the scheduling, the execution id will be used to stop the workflow
+ALTERNATIVE: Workflow sends a request every cycle to a server to check for the current status.
 
 ## Automations Information
 
@@ -52,11 +61,11 @@ N8N_SYNONYMS_URL=[URL to Keywords with poor results n8n webhook]
 N8N_CSV2INDEX_URL=[URL to CSV to Index n8n webhook]
 ```
 
+2. Run `npx ampx sandbox` for backend (and to generate `amplify_output.json`)
+
 ### TODO
 
-- Switch to slack (requires slack asking user for approval -> not implemented)
-- Use Next JS and ___ (for UI)
-- Replicate analytics page in terms of UI (clients each can make/setup their own automations so there's a rolling list of automations)
-- Login page?
-- Ability to schedule automations
-- Zod validation
+- Timezones
+- Fix schedule button
+- Logo
+- Figure out best stopping method for n8n

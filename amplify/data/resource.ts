@@ -7,20 +7,36 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.guest()]),
+	AutomationDetails: a.customType({
+		id: a.string().required(),
+		fieldOptions: a.json().required(),
+
+		isScheduled: a.boolean().required(),
+		scheduleStartDate: a.datetime(), // ISO string
+		scheduleEndDate: a.datetime(),
+		scheduleInterval: a.integer(),
+		scheduleIntervalUnit: a.enum(['seconds', 'minutes', 'hours', 'days'])
+	}),
+
+	// Match AutomationType (id, createdAt, updatedAt are automatically added)
+	Automation: a.model({
+		clientId: a.string().required(),
+		clientName: a.string(),
+		automationDetails: a.ref('AutomationDetails').required()
+	})
+	.authorization((allow) => [allow.authenticated(), allow.publicApiKey()]),
 });
 
-export type Schema = ClientSchema<typeof schema>;
+export type AutomationsSchema = ClientSchema<typeof schema>;
 
 export const data = defineData({
-  schema,
-  authorizationModes: {
-    defaultAuthorizationMode: 'identityPool',
-  },
+	schema,
+	authorizationModes: {
+		defaultAuthorizationMode: 'userPool',
+		apiKeyAuthorizationMode: {
+			expiresInDays: 2,
+		}
+	},
 });
 
 /*== STEP 2 ===============================================================
@@ -47,7 +63,7 @@ Fetch records from the database and use them in your frontend component.
 =========================================================================*/
 
 /* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
+function's RETURN statement */
 // const { data: todos } = await client.models.Todo.list()
 
 // return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>

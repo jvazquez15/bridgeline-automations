@@ -1,44 +1,78 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
 	View,
 	PasswordField,
 	Button,
 	Flex,
-	Link,
 	useTheme,
 	TextField,
-	Text,
 	Alert,
 } from "@aws-amplify/ui-react";
-import { signIn } from "aws-amplify/auth";
+import { signIn, confirmSignIn } from "aws-amplify/auth";
 import "@aws-amplify/ui-react/styles.css";
+import { formatAuthError, getAuthenticatedUser } from "@/utils/auth-utils";
 
-export default function Login() {	
+export default function Login() {
 	const { tokens } = useTheme();
+
 	const router = useRouter();
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+	// Check if user is already authenticated on mount
+	useEffect(() => {
+		
+		const checkAuth = async () => {
+			const { authenticated } = await getAuthenticatedUser();
+
+			if (authenticated) {
+				router.push("/");
+			} else {
+				setIsCheckingAuth(false);
+			}
+		};
+
+		checkAuth();
+	}, [router]);
 
 	const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setError(null);
 		setLoading(true);
-		
+
 		try {
-			await signIn({
+			const signed = await signIn({
 				username: email,
 				password: password,
 			});
 
+			if (!signed.isSignedIn) {
+				if (signed.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED") {
+					const confirmResult = await confirmSignIn({
+						challengeResponse: password,
+					});
+					console.log(confirmResult)
+					if (!confirmResult.isSignedIn) {
+						setError("Tried to sign in with new password. Failed.");
+						return
+					}
+				} else {
+					setError("Sign in failed. Please try again.");
+					return;
+				}
+			}
+
+			console.log("Login successful");
 			router.push("/");
 		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : "Login failed. Please try again.";
+			const errorMessage = formatAuthError(err);
 			setError(errorMessage);
 		} finally {
 			setLoading(false);
@@ -48,6 +82,24 @@ export default function Login() {
 	const handleForgotPassword = () => {
 		router.push("/reset-password");
 	};
+
+	if (isCheckingAuth) {
+		return (
+			<Flex
+				width="100vw"
+				position="absolute"
+				justifyContent="center"
+				alignItems="center"
+				padding="15vh"
+				backgroundColor="#f9fafb"
+				flex={1}
+			>
+				<View padding="32px">
+					Loading...
+				</View>
+			</Flex>
+		);
+	}
 
 	return (
 		<Flex
@@ -105,9 +157,9 @@ export default function Login() {
 					  	variation="error"
 					  	isDismissible={true}
 					  	hasIcon={true}
-						marginBottom="16px"
+						marginBottom="14px"
 					>
-					  	Incorrect username or password.
+					  	{error}
 					</Alert>
 				)}
 
@@ -115,7 +167,7 @@ export default function Login() {
 				<Button
 					width="100%"
 					color="#fff"
-					backgroundColor={tokens.colors.font.orange}
+					backgroundColor={loading ? "#ccc" : tokens.colors.font.orange}
 					fontSize="16px"
 					fontWeight="700"
 					borderRadius="6px"
@@ -123,6 +175,7 @@ export default function Login() {
 					marginBottom="16px"
 					type="submit"
 					isLoading={loading}
+					loadingText="Signing in"
 					disabled={loading}
 				>
 					Sign in
@@ -130,15 +183,14 @@ export default function Login() {
 
 				{/* Forgot Password */}
 				<Flex justifyContent="center">
-					<Link
+					<Button
 						onClick={handleForgotPassword}
-						fontSize="14px"
-						fontWeight="700"
-						color="#047D95"
-						textDecoration="none"
+						variation="link"
+                        size="small"
+						className="hover:border-inherit!"
 					>
 						Forgot your password?
-					</Link>
+					</Button>
 				</Flex>
 			</View>
 		</Flex>
